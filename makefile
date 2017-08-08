@@ -2,6 +2,10 @@ development: base-images
 	cd Docker && cp docker-compose.development.yml docker-compose.yml
 	cd Docker && docker-compose build
 
+testing: base-images
+	cd Docker && cp docker-compose.testing.yml docker-compose.yml
+	cd Docker && docker-compose build
+
 production: base-images
 	cd Docker && cp docker-compose.production.yml docker-compose.yml
 	cd Docker && docker-compose build

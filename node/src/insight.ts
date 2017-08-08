@@ -130,13 +130,12 @@ export default class PoetInsightListener {
     return blockInfo
   }
 
-  doesBitcoreTxContainPoetInfo(tx: any): BlockMetadata {
-    const check = function(script: any, index: number) {
+  doesBitcoreTxContainPoetInfo = (tx: any): BlockMetadata => {
+    const check = (script: any, index: number) => {
       if (script.classify() !== bitcore.Script.types.DATA_OUT)
         return
       const data: Buffer = script.getData()
-      return data.indexOf(POET) === 0
-          && data.indexOf(VERSION) === 4
+      return this.isAcceptedPoetTransaction(data)
           ? {
             transactionHash : tx.hash,
             outputIndex     : index,
@@ -147,6 +146,16 @@ export default class PoetInsightListener {
     return tx.outputs.reduce(
       (prev: boolean, next: any, index: number) => prev || check(next.script, index), false
     )
+  }
+
+  private isAcceptedPoetTransaction = (data: Buffer) => {
+    // TODO: "POET" should be configurable to either POET or BARD
+    return data.indexOf(POET) === 0 && this.isAcceptedPoetVersion(data.slice(4, 8))
+  }
+
+  private isAcceptedPoetVersion = (version: Buffer) => {
+    const minimumVersion = new Buffer([0, 0, 0, 2])
+    return Buffer.compare(version, minimumVersion) >= 0
   }
 
   doesSocketTxContainPoetInfo (tx: any) {

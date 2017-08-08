@@ -1,0 +1,133 @@
+version: "3"
+
+services:
+  auth:
+    build:
+      context: ..
+      dockerfile: ./Docker/auth.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - http
+      - queue
+      - outside
+    ports:
+      - "5000:5000"
+  notifications:
+    build:
+      context: ..
+      dockerfile: ./Docker/notifications.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - http
+      - queue
+      - outside
+      - db
+    ports:
+      - "5500:5500"
+  mock-signer:
+    build:
+      context: ..
+      dockerfile: ./Docker/mock-signer.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - http
+  bitcoin-scanner:
+    build:
+      context: ..
+      dockerfile: ./Docker/bitcoin-scanner.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - queue
+      - outside
+  claims-to-db:
+    build:
+      context: ..
+      dockerfile: ./Docker/claims-to-db.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - queue
+      - outside
+      - db
+  retry-eval:
+    build:
+      context: ..
+      dockerfile: ./Docker/retry-eval.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - queue
+      - outside
+      - db
+  explorer:
+    build:
+      context: ..
+      dockerfile: ./Docker/explorer.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - db
+      - http
+  torrent-system:
+    build:
+      context: ..
+      dockerfile: ./Docker/torrent-system.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+      - ../node/torrents:/poet/torrents
+    networks:
+      - queue
+      - http
+      - outside
+    expose:
+      - "7800"
+  trusted-publisher:
+    build:
+      context: ..
+      dockerfile: ./Docker/trusted-publisher.dockerfile
+    volumes:
+      - ../node/src:/poet/src
+    networks:
+      - queue
+      - http
+      - outside
+    depends_on:
+      - explorer
+  rabbitmq:
+    build:
+      context: ..
+      dockerfile: ./Docker/queue.dockerfile
+    networks:
+      - queue
+    hostname: rabbitmq
+  db:
+    build:
+      context: ..
+      dockerfile: ./Docker/db.dockerfile
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - db
+  web:
+    build:
+      context: ..
+      dockerfile: ./Docker/web-poet-js-remote.dockerfile
+    networks:
+      - http
+      - outside
+    ports:
+      - "3000:3000"
+
+networks:
+  db:
+    internal: true
+  queue:
+    internal: true
+  http:
+    internal: true
+  outside:
+    driver: bridge
