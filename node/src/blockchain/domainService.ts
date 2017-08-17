@@ -18,8 +18,17 @@ import { ClaimService } from "./claimService"
 import { CertificationService } from "./certificatonService"
 import { ListenRules } from "./rules/listen"
 import { EventService } from './eventService'
+import { getConfiguration } from '../claims_to_db/configuration'
 
-const minimumHeight = 1118188
+const command = process.argv[2]
+const commandArgument = process.argv[3]
+
+if ((command !== '--configuration' && command !== '-c') || !commandArgument) {
+  console.error('Usage: [--configuration <path>] [-c <path>]')
+  process.exit()
+}
+
+const configuration = getConfiguration(commandArgument)
 
 export class BlockchainService extends ClaimService {
 
@@ -338,7 +347,7 @@ export class BlockchainService extends ClaimService {
       .orderBy('blocks_processed.height', 'ASC')
       .getMany()
     if (!allBlocks || !allBlocks.length) {
-      return minimumHeight
+      return configuration.minimumHeight
     }
     let lastBlock = parseInt('' + allBlocks[0].height, 10)
     for (let block of allBlocks) {
