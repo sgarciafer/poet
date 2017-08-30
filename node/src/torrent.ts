@@ -2,6 +2,7 @@ import * as fs from 'fs'
 const { promisify } = require('util') // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16860
 import * as path from 'path'
 const WebTorrent = require('webtorrent')
+
 import { ClaimBuilder, Block, noop, assert } from 'poet-js'
 
 import { Queue } from './queue'
@@ -21,6 +22,7 @@ export class TorrentSystem {
   private readonly client: any // TODO: upstream webtorrent needs a better definition file
   private readonly path: string
   private readonly queue: Queue
+  private readonly dhtServer: any
 
   private static BITS_PER_HEX_BYTE = 4
   private static SHA256_LENGTH_IN_BITS = 256
@@ -29,12 +31,20 @@ export class TorrentSystem {
   constructor(torrentPath: string) {
     this.queue = new Queue()
     this.path = torrentPath
-    this.client = new WebTorrent({ torrentPort: 7800 })
+
+    this.client = new WebTorrent()
+
+    //this.client = new WebTorrent({ torrentPort: 7800 })
+
     this.client.on('error', (error: Error) => {
       if (error.message.startsWith('Cannot add duplicate')) {
         return
       }
       this.handleError('Generic WebTorrentError', error)
+    })
+
+    this.client.on('warning', (error: Error) => {
+      console.log(error)
     })
   }
 
@@ -90,7 +100,7 @@ export class TorrentSystem {
       let seedBuffer = new Buffer(buffer) as any
       seedBuffer.name = torrentId
 
-      console.log('Seeding torrent with hash', torrentId)
+      console.log('Seeding torrent with hash', torrentId, ', ', Date.now())
 
       return new Promise((resolve, reject) => {
         this.client.seed(
@@ -112,6 +122,9 @@ export class TorrentSystem {
 
   async seedLocalFiles() {
     try {
+
+      console.log('Seed local files')
+
       const folders = await readdir(this.path)
       for (let folder of folders) {
         const files = await readdir(this.getPathInStorageFolder(folder))
@@ -137,6 +150,7 @@ export class TorrentSystem {
   }
 
   private seedBlockFromFile(file: fs.ReadStream, torrentId: string, blockHash: string) {
+    console.log('Seed block from file')
     this.client.seed(file, this.makeSeedOptions(torrentId, blockHash), noop)
   }
 
