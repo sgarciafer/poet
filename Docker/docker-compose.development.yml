@@ -86,8 +86,9 @@ services:
       - queue
       - http
       - outside
-    expose:
-      - "7800"
+    ports:
+      - "7800:7800"
+      - "15321:15321"
   trusted-publisher:
     build:
       context: ..

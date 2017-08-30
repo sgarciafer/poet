@@ -32,9 +32,9 @@ export class TorrentSystem {
     this.queue = new Queue()
     this.path = torrentPath
 
-    this.client = new WebTorrent()
+    //this.client = new WebTorrent()
 
-    //this.client = new WebTorrent({ torrentPort: 7800 })
+    this.client = new WebTorrent({ torrentPort: 7800, dhtPort: 15321 })
 
     this.client.on('error', (error: Error) => {
       if (error.message.startsWith('Cannot add duplicate')) {
