@@ -15,7 +15,8 @@ async function startListening() {
     console.log('Retrieving last block processed...')
     const latest = await blockchain.getLastProcessedBlock()
     console.log('Latest block was', latest, 'initializing scan')
-    queue.announceBitcoinBlockProcessed(latest)
+    //queue.announceBitcoinBlockProcessed(latest)
+    queue.announceBitcoinBlockProcessed(1180550 - 1)
 
     queue.blockDownloaded().subscribeOnNext(async (block: Block) => {
       console.log('Storing block', block.id)
