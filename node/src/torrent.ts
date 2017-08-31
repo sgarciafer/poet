@@ -72,12 +72,12 @@ export class TorrentSystem {
 
   async start() {
     await this.listenToQueue()
-    await this.seedLocalFiles()
+    //await this.seedLocalFiles()
   }
 
   async listenToQueue() {
     await this.listenToHashesToDownload()
-    await this.listenToNewBlocksToSeed()
+    //await this.listenToNewBlocksToSeed()
   }
 
   downloadTorrent(hash: string) {
