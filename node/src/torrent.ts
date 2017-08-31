@@ -152,7 +152,7 @@ export class TorrentSystem {
   }
 
   private seedBlockFromFile(file: fs.ReadStream, torrentId: string, blockHash: string) {
-    console.log('Seed block from file')
+    console.log('Seed block from file', torrentId, blockHash, Date.now())
     this.client.seed(file, this.makeSeedOptions(torrentId, blockHash), noop)
   }
 

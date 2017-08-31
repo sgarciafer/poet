@@ -42,7 +42,7 @@ export function createObservableDownload(client: any, pathFunction: (_: string) 
     const uri = 'magnet:?xt=urn:btih:' + hash
 
     console.log('create observable download', hash , Date.now())
-    
+
     client.add(
       uri,
       { path: pathFunction(hash) },
