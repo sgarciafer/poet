@@ -41,10 +41,6 @@ export function createObservableDownload(client: any, pathFunction: (_: string) 
   return Rx.Observable.create((observer) => {
     const uri = 'magnet:?xt=urn:btih:' + hash
 
-    if (hash == 'cb9b8e5fbca4f641821348e64d1b75733b2e9215') {
-      console.log('FOUND IT createobservabledownload')
-    }
-
     console.log('create observable download', hash , Date.now())
 
     client.add(uri)
@@ -54,13 +50,15 @@ export function createObservableDownload(client: any, pathFunction: (_: string) 
       { path: pathFunction(hash) },
       (torrent: any) => {
         torrent.on('error', (error: any) => {
+          console.log('error', error)
           observer.onError(error)
         })
         torrent.on('download', () => {
+          console.log('download')
           observer.onNext(torrent.progress)
         })
         torrent.on('done', () => {
-          console.log(uri, 'downloaded')
+          console.log(uri, 'downloaded done')
           observer.onCompleted()
         })
       }

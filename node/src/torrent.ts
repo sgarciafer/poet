@@ -52,12 +52,12 @@ export class TorrentSystem {
         console.log('podria guardar el archivo local', torrent.infoHash)
       })
 
-      torrent.once('done', function () {
+      torrent.once('done', async function () {
         console.log('listo todo joya', torrent.infoHash)
 
 
         console.log('hago de cuenta que lo baje')
-        /*try {
+       /* try {
           const block = await this.getBlockFromFilesystem(torrent.infoHash)
           await this.queue.announceBlockReady(block)
         } catch(error) {
@@ -85,19 +85,19 @@ export class TorrentSystem {
     console.log('le harcodeo 0497f71815053011139d0af6fca33a576da56ecc')
     hash = '0497f71815053011139d0af6fca33a576da56ecc'
 
-    console.log('Downloading', hash, Date.now())
+    /*console.log('Downloading', hash, Date.now())
     const uri = 'magnet:?xt=urn:btih:' + hash
     this.client.add(uri)
     console.log('Added to client', hash, Date.now())
-
-    /*const download = createObservableDownload(
+*/
+    const download = createObservableDownload(
       this.client,
       hash => this.getPathInStorageFolder(hash),
       hash
-    )*/
+    )
 
-    /*download.subscribeOnCompleted(async () => {
-      console.log('Downladed', hash, Date.now())
+    download.subscribeOnCompleted(async () => {
+      console.log('Downladed completedddddddddddd', hash, Date.now())
       try {
         const block = await this.getBlockFromFilesystem(hash)
         await this.queue.announceBlockReady(block)
@@ -105,7 +105,7 @@ export class TorrentSystem {
         console.error(error, Date.now())
         this.handleError('Could not notify of block ready', error)
       }
-    })*/
+    })
   }
 
   async listenToHashesToDownload() {
