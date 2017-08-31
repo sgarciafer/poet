@@ -50,8 +50,8 @@ export class TorrentSystem {
 
   downloadTorrent(hash: string) {
 
-    console.log('le harcodeo 0497f71815053011139d0af6fca33a576da56ecc')
-    hash = '0497f71815053011139d0af6fca33a576da56ecc'
+    //console.log('le harcodeo 0497f71815053011139d0af6fca33a576da56ecc')
+    //hash = '0497f71815053011139d0af6fca33a576da56ecc'
 
     const download = createObservableDownload(
       this.client,
