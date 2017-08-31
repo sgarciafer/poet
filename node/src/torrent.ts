@@ -82,12 +82,10 @@ export class TorrentSystem {
 
   downloadTorrent(hash: string) {
 
-    if (hash == '0497f71815053011139d0af6fca33a576da56ecc') {
-      console.log('FOUND THE PROFILE SEEDED FROM TORRENTS2')
-    }
-
+    console.log('Downloading', hash, Date.now())
     const uri = 'magnet:?xt=urn:btih:' + hash
     this.client.add(uri)
+    console.log('Added to client', hash, Date.now())
 
     /*const download = createObservableDownload(
       this.client,
@@ -95,7 +93,6 @@ export class TorrentSystem {
       hash
     )*/
 
-    console.log('Downloading', hash, Date.now())
     /*download.subscribeOnCompleted(async () => {
       console.log('Downladed', hash, Date.now())
       try {
