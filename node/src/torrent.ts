@@ -82,7 +82,7 @@ export class TorrentSystem {
 
   downloadTorrent(hash: string) {
 
-    if (hash == 'cb9b8e5fbca4f641821348e64d1b75733b2e9215') {
+    if (hash == '0497f71815053011139d0af6fca33a576da56ecc') {
       console.log('FOUND THE PROFILE SEEDED FROM TORRENTS2')
     }
 
