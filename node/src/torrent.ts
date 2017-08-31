@@ -54,6 +54,18 @@ export class TorrentSystem {
 
       torrent.once('done', function () {
         console.log('listo todo joya', torrent.infoHash)
+
+
+        console.log('hago de cuenta que lo baje')
+        /*try {
+          const block = await this.getBlockFromFilesystem(torrent.infoHash)
+          await this.queue.announceBlockReady(block)
+        } catch(error) {
+          console.error(error, Date.now())
+          this.handleError('Could not notify of block ready', error)
+        }*/
+
+
       })
     })
   }
@@ -74,14 +86,17 @@ export class TorrentSystem {
       console.log('FOUND THE PROFILE SEEDED FROM TORRENTS2')
     }
 
-    const download = createObservableDownload(
+    const uri = 'magnet:?xt=urn:btih:' + hash
+    this.client.add(uri)
+
+    /*const download = createObservableDownload(
       this.client,
       hash => this.getPathInStorageFolder(hash),
       hash
-    )
+    )*/
 
     console.log('Downloading', hash, Date.now())
-    download.subscribeOnCompleted(async () => {
+    /*download.subscribeOnCompleted(async () => {
       console.log('Downladed', hash, Date.now())
       try {
         const block = await this.getBlockFromFilesystem(hash)
@@ -90,7 +105,7 @@ export class TorrentSystem {
         console.error(error, Date.now())
         this.handleError('Could not notify of block ready', error)
       }
-    })
+    })*/
   }
 
   async listenToHashesToDownload() {
