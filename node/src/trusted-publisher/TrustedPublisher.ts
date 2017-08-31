@@ -50,7 +50,7 @@ export class TrustedPublisher {
     }
   }
 
-  private async postTitles(ctx: any) {
+  private postTitles = async (ctx: any) => {
     const body = JSON.parse(ctx.request.body)
     const claims = [ClaimBuilder.createSignedClaim({
       type: ClaimTypes.TITLE,
@@ -74,7 +74,7 @@ export class TrustedPublisher {
     })
   }
 
-  private async postLicenses(ctx: any) {
+  private postLicenses = async (ctx: any) => {
     const body = JSON.parse(ctx.request.body)
     const claims = [ClaimBuilder.createSignedClaim({
       type: ClaimTypes.LICENSE,
@@ -97,7 +97,7 @@ export class TrustedPublisher {
     })
   }
 
-  private async postClaims(ctx: any) {
+  private postClaims = async (ctx: any) => {
     const signs = JSON.parse(ctx.request.body).signatures
 
     const claims: ReadonlyArray<Claim> = signs.map((sig: any) => {
@@ -153,7 +153,7 @@ export class TrustedPublisher {
     })
   }
 
-  private async postClaimsV2(ctx: any) {
+  private postClaimsV2 = async (ctx: any) => {
     const signs = JSON.parse(ctx.request.body).claims
 
     const claims: ReadonlyArray<Claim> = signs.map((sig: any) => {
@@ -188,7 +188,7 @@ export class TrustedPublisher {
     })
   }
 
-  private async createBlock(claims: ReadonlyArray<Claim>) {
+  private createBlock = async (claims: ReadonlyArray<Claim>) => {
     const certificates: ReadonlyArray<Claim> = claims.map(claim => ClaimBuilder.createSignedClaim({
       type: ClaimTypes.CERTIFICATE,
       attributes: {
@@ -210,7 +210,7 @@ export class TrustedPublisher {
     return block.claims
   }
 
-  private async timestampClaimBlock(block: Block): Promise<void> {
+  private timestampClaimBlock = async (block: Block): Promise<void> => {
     const id = await getHash(ClaimBuilder.serializeBlockForSave(block), block.id)
 
     // We're retrieving UTXO using bitcore's insight client rather than our own, but both work fine.
