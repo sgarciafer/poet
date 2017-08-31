@@ -138,9 +138,9 @@ export default class PoetInsightListener {
 
       if (data.indexOf(POET) === 0) {
 
-        console.log('its POET!')
+        console.log('its POET!', data)
 
-        if (data.indexOf(VERSION) === 8) {
+        if (data.indexOf(new Buffer([0, 0, 0, 8])) === 4) {
 
           console.log('its version 8!')
 
