@@ -19,7 +19,7 @@ import { CertificationService } from "./certificatonService"
 import { ListenRules } from "./rules/listen"
 import { EventService } from './eventService'
 
-const minimumHeight = 1118188
+const minimumHeight = 1180673
 
 export class BlockchainService extends ClaimService {
 

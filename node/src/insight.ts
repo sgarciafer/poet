@@ -136,7 +136,7 @@ export default class PoetInsightListener {
         return
       const data: Buffer = script.getData()
       return data.indexOf(POET) === 0
-          && data.indexOf(VERSION) === 4
+          && data.indexOf(VERSION) === 8
           ? {
             transactionHash : tx.hash,
             outputIndex     : index,
