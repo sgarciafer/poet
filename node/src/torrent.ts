@@ -82,6 +82,9 @@ export class TorrentSystem {
 
   downloadTorrent(hash: string) {
 
+    console.log('le harcodeo 0497f71815053011139d0af6fca33a576da56ecc')
+    hash = '0497f71815053011139d0af6fca33a576da56ecc'
+
     console.log('Downloading', hash, Date.now())
     const uri = 'magnet:?xt=urn:btih:' + hash
     this.client.add(uri)
