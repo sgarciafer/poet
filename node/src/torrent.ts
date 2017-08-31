@@ -60,8 +60,11 @@ export class TorrentSystem {
       console.log('Downladed', hash)
       try {
         const block = await this.getBlockFromFilesystem(hash)
+        console.log('I')
         await this.queue.announceBlockReady(block)
+        console.log('J')
       } catch(error) {
+        console.log('K')
         this.handleError('Could not notify of block ready', error)
       }
     })
@@ -155,17 +158,25 @@ export class TorrentSystem {
   }
 
   private async getBlockFromFilesystem(hash: string): Promise<Block> {
+    console.log('A')
     const files = await readdir(this.getPathInStorageFolder(hash))
+    console.log('B')
     if (!TorrentSystem.validDirectoryContents(files)) {
+      console.log('C')
       throw new Error('Could not read file')
     }
+    console.log('D')
     const content = files[0]
+    console.log('E')
     const file = this.getFilePathInStorage(hash, content)
+    console.log('F')
     const data = await new Promise<Buffer>((resolve, reject) => {
       fs.readFile(file, (err, buf) => {
         if (err) {
+          console.log('G')
           return reject(err)
         }
+        console.log('H')
         return resolve(buf)
       })
     })

@@ -33,6 +33,7 @@ export class ClaimsToDb {
   }
 
   private blockDownloaded = (block: Block) => {
+    console.log('Will store block')
     this.storeBlock(block)
   }
 
