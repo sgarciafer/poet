@@ -22,7 +22,6 @@ export class TorrentSystem {
   private readonly client: any // TODO: upstream webtorrent needs a better definition file
   private readonly path: string
   private readonly queue: Queue
-  private readonly dhtServer: any
 
   private static BITS_PER_HEX_BYTE = 4
   private static SHA256_LENGTH_IN_BITS = 256
@@ -65,13 +64,14 @@ export class TorrentSystem {
       hash
     )
 
-    console.log('Downloading', hash)
+    console.log('Downloading', hash, Date.now())
     download.subscribeOnCompleted(async () => {
-      console.log('Downladed', hash)
+      console.log('Downladed', hash, Date.now())
       try {
         const block = await this.getBlockFromFilesystem(hash)
         await this.queue.announceBlockReady(block)
       } catch(error) {
+        console.error(error, Date.now())
         this.handleError('Could not notify of block ready', error)
       }
     })
@@ -100,7 +100,7 @@ export class TorrentSystem {
       let seedBuffer = new Buffer(buffer) as any
       seedBuffer.name = torrentId
 
-      console.log('Seeding torrent with hash', torrentId, ', ', Date.now())
+      console.log('Seeding torrent with hash', torrentId, Date.now())
 
       return new Promise((resolve, reject) => {
         this.client.seed(
@@ -116,6 +116,7 @@ export class TorrentSystem {
         )
       })
     } catch (error) {
+      console.error(error, Date.now())
       this.handleError('Could not seed file', error)
     }
   }
@@ -123,7 +124,7 @@ export class TorrentSystem {
   async seedLocalFiles() {
     try {
 
-      console.log('Seed local files')
+      console.log('Seed local files', Date.now())
 
       const folders = await readdir(this.path)
       for (let folder of folders) {
@@ -145,6 +146,7 @@ export class TorrentSystem {
         )
       }
     } catch (error) {
+      console.error(error, Date.now())
       this.handleError('Could not read stored files', error)
     }
   }
