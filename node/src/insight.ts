@@ -135,14 +135,27 @@ export default class PoetInsightListener {
       if (script.classify() !== bitcore.Script.types.DATA_OUT)
         return
       const data: Buffer = script.getData()
-      return data.indexOf(POET) === 0
-          && data.indexOf(VERSION) === 8
-          ? {
+
+      if (data.indexOf(POET) === 0) {
+
+        console.log('its POET!')
+
+        if (data.indexOf(VERSION) === 8) {
+
+          console.log('its version 8!')
+
+          return {
             transactionHash : tx.hash,
             outputIndex     : index,
             torrentHash     : data.slice(8).toString('hex')
           }
-          : null
+
+        }
+
+        return null
+      }
+
+      return null
     }
     return tx.outputs.reduce(
       (prev: boolean, next: any, index: number) => prev || check(next.script, index), false

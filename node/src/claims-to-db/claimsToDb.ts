@@ -21,7 +21,7 @@ export class ClaimsToDb {
     await this.blockchain.start(() => getConnection(this.configuration.db))
 
     console.log('Retrieving last processed block...')
-    const latest = await this.blockchain.getLastProcessedBlock()
+    const latest = 1180690 //await this.blockchain.getLastProcessedBlock()
     console.log(`Latest processed block was ${latest}.`)
 
     console.log(`Initializing scan.`)
