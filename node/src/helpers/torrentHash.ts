@@ -41,7 +41,13 @@ export function createObservableDownload(client: any, pathFunction: (_: string) 
   return Rx.Observable.create((observer) => {
     const uri = 'magnet:?xt=urn:btih:' + hash
 
+    if (hash == 'cb9b8e5fbca4f641821348e64d1b75733b2e9215') {
+      console.log('FOUND IT createobservabledownload')
+    }
+
     console.log('create observable download', hash , Date.now())
+
+    client.add(uri)
 
     client.add(
       uri,

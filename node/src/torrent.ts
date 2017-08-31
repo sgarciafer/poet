@@ -45,6 +45,17 @@ export class TorrentSystem {
     this.client.on('warning', (error: Error) => {
       console.log(error)
     })
+
+    this.client.on('torrent', function (torrent: any) {
+      torrent.files[0].getBuffer(function (err: any, buf: any) {
+        if (err) console.error(err)
+        console.log('podria guardar el archivo local', torrent.infoHash)
+      })
+
+      torrent.once('done', function () {
+        console.log('listo todo joya', torrent.infoHash)
+      })
+    })
   }
 
   async start() {
@@ -58,6 +69,11 @@ export class TorrentSystem {
   }
 
   downloadTorrent(hash: string) {
+
+    if (hash == 'cb9b8e5fbca4f641821348e64d1b75733b2e9215') {
+      console.log('FOUND THE PROFILE SEEDED FROM TORRENTS2')
+    }
+
     const download = createObservableDownload(
       this.client,
       hash => this.getPathInStorageFolder(hash),
