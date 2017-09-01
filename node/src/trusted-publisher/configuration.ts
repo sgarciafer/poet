@@ -25,7 +25,7 @@ export function loadTrustedPublisherConfiguration(path: string): TrustedPublishe
   const configuration = JSON.parse(fs.readFileSync(path, 'utf8'))
 
   if ('poetVersion' in configuration) {
-    validatePoetVersion(configuration)
+    validatePoetVersion(configuration.poetVersion)
   }
 
   return {
