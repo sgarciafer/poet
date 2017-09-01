@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { validatePoetVersion } from '../helpers/ConfigurationHelper'
+import { validatePoetNetwork, validatePoetVersion } from '../helpers/ConfigurationHelper'
 
 export interface BitcoinScannerConfiguration {
   readonly poetNetwork: string,
@@ -21,7 +21,11 @@ export function loadBitcoinScannerConfiguration(path: string): BitcoinScannerCon
 
   const configuration = JSON.parse(fs.readFileSync(path, 'utf8'))
 
-  if ('poetVersion' in configuration) {
+  if (configuration.poetNetwork) {
+    validatePoetNetwork(configuration.poetNetwork)
+  }
+
+  if (configuration.poetVersion) {
     validatePoetVersion(configuration.poetVersion)
   }
 
