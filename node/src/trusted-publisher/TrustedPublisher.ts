@@ -102,7 +102,7 @@ export class TrustedPublisher {
 
     const claims: ReadonlyArray<Claim> = signs.map((sig: any) => {
       const claim = ClaimBuilder.serializedToClaim(
-        new Buffer(new Buffer(sig.message, 'hex').toString(), 'hex')
+        Buffer.from(Buffer.from(sig.message, 'hex').toString(), 'hex')
       )
       claim.signature = sig.signature
       claim.id = new Buffer(ClaimBuilder.getId(claim)).toString('hex')
@@ -158,7 +158,7 @@ export class TrustedPublisher {
 
     const claims: ReadonlyArray<Claim> = signs.map((sig: any) => {
       const claim = ClaimBuilder.serializedToClaim(
-        new Buffer(sig.claim, 'hex')
+        Buffer.from(sig.claim, 'hex')
       )
       claim.signature = sig.signature
       claim.id = new Buffer(ClaimBuilder.getId(claim)).toString('hex')
@@ -219,9 +219,9 @@ export class TrustedPublisher {
     console.log('\n\nutxoBitcore', JSON.stringify(utxoBitcore, null, 2))
 
     const data = Buffer.concat([
-      new Buffer(this.configuration.poetNetwork),
-      new Buffer(this.configuration.poetVersion), // TODO: Move this to poet-js
-      new Buffer(id, 'hex')
+      Buffer.from(this.configuration.poetNetwork),
+      Buffer.from(this.configuration.poetVersion), // TODO: Move this to poet-js
+      Buffer.from(id, 'hex')
     ])
     const tx = new bitcore.Transaction()
       .from(utxoBitcore)

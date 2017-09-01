@@ -22,7 +22,7 @@ const pluckMember = (name: string) => (obj: any) => obj[name]
 const getTransaction = pluckMember('rawtx')
 const getBuffer = (data: string) => {
   try {
-    return new Buffer(data, 'hex')
+    return Buffer.from(data, 'hex')
   } catch (e) {
     console.log('Error processing', data)
     throw e
@@ -63,8 +63,8 @@ export class PoetInsightListener {
 
   constructor(insightUrl: string, poetNetwork: string, poetVersion: number[]) {
     this.insightUrl = insightUrl
-    this.poetNetwork = new Buffer(poetNetwork)
-    this.poetVersion = new Buffer(poetVersion)
+    this.poetNetwork = Buffer.from(poetNetwork)
+    this.poetVersion = Buffer.from(poetVersion)
     this.txListeners = []
     this.poetBlockListeners = []
     this.bitcoinBlockListeners = []
