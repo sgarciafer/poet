@@ -5,7 +5,7 @@ import * as KoaBody from 'koa-body'
 import * as KoaRoute from 'koa-route'
 import * as bitcore from 'bitcore-lib'
 import * as explorers from 'bitcore-explorers'
-import { Fields, ClaimTypes, Claim, Block, ClaimBuilder, hex, POET } from 'poet-js'
+import { Fields, ClaimTypes, Claim, Block, ClaimBuilder, hex } from 'poet-js'
 
 import { getHash } from '../helpers/torrentHash' // TODO: use poet-js
 import { Queue } from '../queue'
@@ -219,8 +219,8 @@ export class TrustedPublisher {
     console.log('\n\nutxoBitcore', JSON.stringify(utxoBitcore, null, 2))
 
     const data = Buffer.concat([
-      POET,
-      new Buffer([0, 0, 0, this.configuration.poetVersion]), // TODO: add a function version(versionString: string): Buffer to poet-js
+      new Buffer(this.configuration.poetNetwork),
+      new Buffer(this.configuration.poetVersion), // TODO: Move this to poet-js
       new Buffer(id, 'hex')
     ])
     const tx = new bitcore.Transaction()

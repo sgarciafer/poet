@@ -15,7 +15,4 @@ async function start() {
   }
 }
 
-start().catch(error => {
-  console.log(error, error.stack)
-  process.exit(1)
-})
+start()

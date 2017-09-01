@@ -1,12 +1,14 @@
 import * as fs from 'fs'
 
 export interface BitcoinScannerConfiguration {
-  readonly poetVersion: number
+  readonly poetNetwork: string,
+  readonly poetVersion: number[]
   readonly insightUrl: string
 }
 
 const defaultOptions: Partial<BitcoinScannerConfiguration> = {
-  poetVersion: 2,
+  poetNetwork: 'BARD',
+  poetVersion: [0, 0, 0, 2],
   insightUrl: 'https://test-insight.bitpay.com',
 }
 

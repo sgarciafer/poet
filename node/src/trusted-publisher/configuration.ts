@@ -5,12 +5,14 @@ export interface TrustedPublisherConfiguration {
   readonly bitcoinAddressPrivateKey: string
   readonly bitcoinAddress: string
   readonly port: number
-  readonly poetVersion: number
+  readonly poetNetwork: string
+  readonly poetVersion: number[]
 }
 
 const defaultOptions: Partial<TrustedPublisherConfiguration> = {
   port: 6000,
-  poetVersion: 2
+  poetNetwork: 'BARD',
+  poetVersion: [0, 0, 0, 2]
 }
 
 export function loadTrustedPublisherConfiguration(path: string): TrustedPublisherConfiguration {
