@@ -21,7 +21,9 @@ export function loadBitcoinScannerConfiguration(path: string): BitcoinScannerCon
 
   const configuration = JSON.parse(fs.readFileSync(path, 'utf8'))
 
-  validatePoetVersion(configuration)
+  if ('poetVersion' in configuration) {
+    validatePoetVersion(configuration)
+  }
 
   return {
     ...defaultOptions,
