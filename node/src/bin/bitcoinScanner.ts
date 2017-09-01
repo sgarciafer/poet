@@ -1,76 +1,20 @@
-import Bluebird = require("bluebird")
+import { getConfigurationPath } from '../helpers/CommandLineArgumentsHelper'
+import { loadBitcoinScannerConfiguration } from '../bitcoin-scanner/configuration'
+import { BitcoinScanner } from '../bitcoin-scanner/bitcoinScanner'
 
-import PoetInsightListener, { BitcoinBlock } from '../insight'
-import { Queue } from '../queue'
+const configurationPath = getConfigurationPath()
+const configuration = loadBitcoinScannerConfiguration(configurationPath)
 
+console.log('Bitcoin Scanner Configuration: ', JSON.stringify(configuration, null, 2))
 
-async function startup() {
-  let insight: PoetInsightListener
-
-  const queue = new Queue()
-
-  console.log('Requesting blockchain info from insight...')
-
+async function start() {
   try {
-    insight = new PoetInsightListener('https://test-insight.bitpay.com')
-
-    insight.subscribeBitcoinBlock(async (block) => {
-      // Store ntxid => txid info
-      for (let tx of block.transactions) {
-        await queue.announceNormalizedTransaction({
-          ntxId: tx.nid,
-          txId: tx.id
-        })
-      }
-    })
-
-    queue.bitcoinBlockProcessed().subscribeOnNext(async (latest: number) => {
-      console.log('Scanning block', latest + 1)
-      const height = parseInt('' + latest, 10) + 1
-      try {
-        const block = await insight.fetchBitcoreBlockByHeight(height)
-        insight.scanBitcoreBlock(block, height)
-      } catch (e) {
-        const latestHeight = await insight.getCurrentHeight()
-        if (latestHeight === height - 1) {
-          return
-        }
-        queue.dispatchWork('tryScan', height - 1)
-      }
-    })
-
-    process.nextTick(() => {
-      queue.workThread('tryScan', (data: string) => {
-        const height = JSON.parse(data)
-        queue.announceBitcoinBlockProcessed(height)
-      })
-    })
-
-    insight.subscribeBlock(async (block) => {
-      console.log('found block info', block)
-      try {
-        await queue.announceBitcoinBlock(block)
-      } catch (error) {
-        console.log('Could not publish block', error, error.stack)
-      }
-    })
-
-    insight.subscribeTx(async (tx) => {
-      console.log('found tx', tx)
-      try {
-        await queue.announceBitcoinTransaction(tx)
-      } catch (error) {
-        console.log('Could not publish tx', error, error.stack)
-      }
-    })
+    const bitcoinScanner = new BitcoinScanner(configuration)
+    await bitcoinScanner.start()
+    console.log('Bitcoin Scanner started successfully.')
   } catch (error) {
-    console.log('Could not initialize insight', error, error.stack)
-    throw error
+    console.log('Bitcoin Scanner failed to start. Error was: ', error)
   }
-  console.log('Setup complete!')
 }
 
-startup().catch(error => {
-  console.log(error, error.stack)
-  process.exit(1)
-})
+start()

@@ -1,6 +1,5 @@
 import * as socketIO from 'socket.io-client'
 import * as fetch from 'isomorphic-fetch'
-import { POET, VERSION } from 'poet-js';
 import { InsightClient as Client, ApiMode } from 'insight-client-js'
 const bitcore = require('bitcore-lib')
 
@@ -23,7 +22,7 @@ const pluckMember = (name: string) => (obj: any) => obj[name]
 const getTransaction = pluckMember('rawtx')
 const getBuffer = (data: string) => {
   try {
-    return new Buffer(data, 'hex')
+    return Buffer.from(data, 'hex')
   } catch (e) {
     console.log('Error processing', data)
     throw e
@@ -53,16 +52,19 @@ export interface BitcoinBlock {
   }
 }
 
-export default class PoetInsightListener {
+export class PoetInsightListener {
+  readonly insightUrl: string
+  readonly poetNetwork: Buffer
+  readonly poetVersion: Buffer
+  readonly socket: SocketIOClient.Socket
+  readonly txListeners: TxInfoListener[]
+  readonly poetBlockListeners: BlockInfoListener[]
+  readonly bitcoinBlockListeners: BitcoinBlockListener[]
 
-  insightUrl: string
-  socket: SocketIOClient.Socket
-  txListeners: TxInfoListener[]
-  poetBlockListeners: BlockInfoListener[]
-  bitcoinBlockListeners: BitcoinBlockListener[]
-
-  constructor(insightUrl: string) {
+  constructor(insightUrl: string, poetNetwork: string, poetVersion: number[]) {
     this.insightUrl = insightUrl
+    this.poetNetwork = Buffer.from(poetNetwork)
+    this.poetVersion = Buffer.from(poetVersion)
     this.txListeners = []
     this.poetBlockListeners = []
     this.bitcoinBlockListeners = []
@@ -135,8 +137,8 @@ export default class PoetInsightListener {
       if (script.classify() !== bitcore.Script.types.DATA_OUT)
         return
       const data: Buffer = script.getData()
-      return data.indexOf(POET) === 0
-          && data.indexOf(VERSION) === 4
+      return data.indexOf(this.poetNetwork) === 0
+          && data.indexOf(this.poetVersion) === 4
           ? {
             transactionHash : tx.hash,
             outputIndex     : index,

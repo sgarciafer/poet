@@ -5,6 +5,8 @@ import { TrustedPublisher } from '../trusted-publisher/TrustedPublisher'
 const configurationPath = getConfigurationPath()
 const configuration = loadTrustedPublisherConfiguration(configurationPath)
 
+console.log('Trusted Publisher Configuration: ', JSON.stringify(configuration, null, 2))
+
 async function start() {
   try {
     const trustedPublisher = new TrustedPublisher(configuration)

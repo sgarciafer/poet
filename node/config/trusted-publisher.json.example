@@ -2,4 +2,6 @@
   "bitcoinAddress": "",
   "bitcoinAddressPrivateKey": "",
   "notaryPrivateKey": "",
+  "poetNetwork": "BARD",
+  "poetVersion": [0, 0, 0, 2]
 }
