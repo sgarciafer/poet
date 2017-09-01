@@ -220,7 +220,7 @@ export class TrustedPublisher {
 
     const data = Buffer.concat([
       POET,
-      new Buffer([0, 0, 0, 2]), // TODO: configurable this & add a function version(versionString: string): Buffer to poet-js
+      new Buffer([0, 0, 0, this.configuration.poetVersion]), // TODO: add a function version(versionString: string): Buffer to poet-js
       new Buffer(id, 'hex')
     ])
     const tx = new bitcore.Transaction()

@@ -54,15 +54,16 @@ export interface BitcoinBlock {
 }
 
 export default class PoetInsightListener {
-
   insightUrl: string
+  poetVersion: number
   socket: SocketIOClient.Socket
   txListeners: TxInfoListener[]
   poetBlockListeners: BlockInfoListener[]
   bitcoinBlockListeners: BitcoinBlockListener[]
 
-  constructor(insightUrl: string) {
+  constructor(insightUrl: string, poetVersion: number) {
     this.insightUrl = insightUrl
+    this.poetVersion = poetVersion
     this.txListeners = []
     this.poetBlockListeners = []
     this.bitcoinBlockListeners = []
@@ -136,7 +137,7 @@ export default class PoetInsightListener {
         return
       const data: Buffer = script.getData()
       return data.indexOf(POET) === 0
-          && data.indexOf(VERSION) === 4
+          && data.indexOf(new Buffer([0, 0, 0, this.poetVersion])) === 4
           ? {
             transactionHash : tx.hash,
             outputIndex     : index,
