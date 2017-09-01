@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import { validatePoetVersion } from '../helpers/ConfigurationHelper'
 
 export interface BitcoinScannerConfiguration {
   readonly poetNetwork: string,
@@ -18,8 +19,12 @@ export function loadBitcoinScannerConfiguration(path: string): BitcoinScannerCon
     process.exit()
   }
 
+  const configuration = JSON.parse(fs.readFileSync(path, 'utf8'))
+
+  validatePoetVersion(configuration)
+
   return {
     ...defaultOptions,
-    ...JSON.parse(fs.readFileSync(path, 'utf8'))
+    ...configuration
   }
 }

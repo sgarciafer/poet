@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import { validatePoetVersion } from '../helpers/ConfigurationHelper'
 
 export interface TrustedPublisherConfiguration {
   readonly notaryPrivateKey: string
@@ -21,8 +22,12 @@ export function loadTrustedPublisherConfiguration(path: string): TrustedPublishe
     process.exit()
   }
 
+  const configuration = JSON.parse(fs.readFileSync(path, 'utf8'))
+
+  validatePoetVersion(configuration)
+
   return {
     ...defaultOptions,
-    ...JSON.parse(fs.readFileSync(path, 'utf8'))
+    ...configuration
   }
 }
