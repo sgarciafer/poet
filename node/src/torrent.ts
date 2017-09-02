@@ -39,13 +39,9 @@ export class TorrentSystem {
   }
 
   async start() {
-    await this.listenToQueue()
-    await this.seedLocalFiles()
-  }
-
-  async listenToQueue() {
     await this.listenToHashesToDownload()
     await this.listenToNewBlocksToSeed()
+    await this.seedLocalFiles()
   }
 
   downloadTorrent(hash: string) {
@@ -88,7 +84,7 @@ export class TorrentSystem {
 
       // Copy the buffer to seed and set a custom "name" field needed by WebTorrent
       let seedBuffer = new Buffer(buffer) as any
-      seedBuffer.name = torrentId
+      //seedBuffer.name = torrentId
 
       console.log('Seeding torrent with hash', torrentId)
 
