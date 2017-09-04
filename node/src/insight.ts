@@ -132,7 +132,7 @@ export class PoetInsightListener {
     return blockInfo
   }
 
-  doesBitcoreTxContainPoetInfo(tx: any): BlockMetadata {
+  doesBitcoreTxContainPoetInfo = (tx: any): BlockMetadata => {
     const check = function(script: any, index: number) {
       if (script.classify() !== bitcore.Script.types.DATA_OUT)
         return
