@@ -21,11 +21,11 @@ export function loadBitcoinScannerConfiguration(path: string): BitcoinScannerCon
 
   const configuration = JSON.parse(fs.readFileSync(path, 'utf8'))
 
-  if (typeof configuration.poetNetwork == 'object') {
+  if (typeof configuration.poetNetwork == 'string') {
     validatePoetNetwork(configuration.poetNetwork)
   }
 
-  if (typeof configuration.poetVersion== 'object') {
+  if (typeof configuration.poetVersion == 'object') {
     validatePoetVersion(configuration.poetVersion)
   }
 
