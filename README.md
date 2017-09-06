@@ -17,7 +17,9 @@ See Po.et Web's [README](./web)
 ### End points & API related for consumers
 
 endpoint: /api/user/claims
+
 method: POST
+
 payload: 
 [{}]
 
