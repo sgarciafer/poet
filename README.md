@@ -13,3 +13,12 @@ See Po.et Node's [README](./node)
 The frontend. This will be split into another repository, [poet-web](https://github.com/poetapp/web). 
 
 See Po.et Web's [README](./web)
+
+### End points & API related for consumers
+
+endpoint: /api/user/claims
+method: POST
+payload: 
+[{}]
+
+
